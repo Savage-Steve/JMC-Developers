@@ -1,0 +1,23 @@
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  release-notification:
+    name: release notification
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        to-emails:
+          - PBennett4186@chester.k12.sc.us
+
+
+    steps:
+      - uses: licenseware/send-email-notification@v1
+        with:
+          api-key: ${{ secrets.SENDGRID_API_KEY }}
+          subject: New Release ${{ github.repository }}:${{ github.ref_name }}
+          from-email: verified-email@licenseware.io
+          to-email: ${{ matrix.to-emails }}
+          markdown-body: ${{ github.event.release.body }}
